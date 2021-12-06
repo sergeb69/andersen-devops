@@ -1,0 +1,32 @@
+---
+- name: Andersen Task 2
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Install packages
+      apt:
+        pkg:
+          - git
+          - python-pip
+          - python3-pip
+          - npm
+
+    - name: Install Flask
+      pip: name=flask
+
+    - name: Intall pm2
+      shell: "npm i pm2 -g"
+
+    - name: Clone repo
+      git:
+        repo: https://github.com/sergeb69/andersen-devops.git
+        dest: ~/andersen/
+        clone: yes
+        update: yes
+
+    - name: Run app
+      shell: |
+        pm2 start ~/andersen/Task_2/flask-app/hello_world.py --name flask-app
+      ignore_errors: true
+      
